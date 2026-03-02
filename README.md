@@ -1,93 +1,93 @@
-# desweb
+# Docker Django API template
 
+It is a Docker template to start Django + DRF + GeoDjango APIs.
+It cams with a working example in the buildings app.
 
+# Help
 
-## Getting started
+- Clone the repo:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.rlp.net/Mag783/desweb.git
-git branch -M main
-git push -uf origin main
+```ruby
+    git clone https://github.com/joamona/django-api-template.git
 ```
 
-## Integrate with your tools
+- Change to the project folder:
+```ruby
+    cd django-api-template
+```
 
-* [Set up project integrations](https://gitlab.rlp.net/Mag783/desweb/-/settings/integrations)
+- Create the pgadmin folders:
+```ruby
+    Windows: pgadmin_create_folders_windows.bat
+    Linux: ./pgadmin_create_folders_linux.sh
+```
 
-## Collaborate with your team
+- Change the ports of the services in the file .env
+- Change the secret key, username, database name, etc. in the file .env.dev
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+- Create the images, containers and start the services:
+```ruby
+    docker compose up
+```
+- First time you will get a connection error from the service djangoapi. This is because PostgreSQL is stil
+creating the database. Once the PostgreSQL service is OK. Cancel and start the services again.
 
-## Test and Deploy
+```ruby
+    control + c (cancel)
+    docker compose up
+```
 
-Use the built-in continuous integration in GitLab.
+Everithing should be fine now.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+- Check the services:
 
-***
+    - pgadmin: http://localhost:5050
+    - geoserver: http://localhost:8080 (Not started by default. You must uncomment the service in docker-compose.yml)
+    - Django API: http://localhost:8000/core/hello_world/
 
-# Editing this README
+# Initialize de database
+A superuser must be created and the database must be migrated in order to create de database tables.
+This work is done in the script ./initdb.sh. To execute this script:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+    - Get into the container *-djangoapi-1 and type:
 
-## Suggestions for a good README
+```ruby
+    ./initdb.sh
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# Start developping
+To avoid to install Pyhton and its dependencies in your computer, you can 
+use the interpreter in the container. You can achieve this with Visual Studio Code (VS).
 
-## Name
-Choose a self-explaining name for your project.
+- Start the services: docker compose up.
+- Open VS.
+- Press Ctrl + Shift + p.
+- Paste the following: Dev Containers: Attach to Running Container.
+- Select the container *-djangoapi-1.
+- A new VS code window is started.
+- Select the interpreter: Ctrl + Shift + p, and type python select interpreter, and select the interpreter in the container. There are two interpreters. Select the one in 
+/usr/local/bib/python. This one is the one that has all the pythoin mackages installed: Django, GeoDjango, etc. In this way VS will help you to code.
+- Now, you can modify the source files, and create new Django apps from the VS connected to the container.
+- To create a new app, in the terminal, in the VS connected to the container, type: 
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+    python manage.py startapp mynewapp
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+# Debugging
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+RemoteDebug has been configured in the VS project and in settings.py. To stop the execution in a line:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- Put a breackpoint.
+- Set, in djangoapi/settings.py, the REMOTE_DEBUG to true.
+- Open the Debug window of VS and click Play over the DjangoAPI configuration.
+- Ready to debug.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+# Installed apps
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+The project cams with three app:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+- core: It has the myLib package, who contains the geoModelSerializer. It is a base class to manage models with geometries. Ii uses geodjango.
+- codelist: It is empty. It us thougt to contain all the models who represents codelists of possible values for other models.
+- buildings: It contains a model, serializer, and modelViewSet as example of DFR and  geoModelSerializer example. 
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.

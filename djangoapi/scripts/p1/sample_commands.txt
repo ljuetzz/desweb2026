@@ -1,0 +1,53 @@
+*******************************************************
+Streets
+*******************************************************
+Insert:
+python main.py streets insert '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
+python main.py streets insert '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)","epsg":25830}'
+python main.py streets insert '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)","epsg":25830}'
+
+Delete:
+python main.py streets delete '{"id": "10"}'
+
+Update:
+python main.py streets update '{"id":12,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)","epsg":25830}'
+
+Select:
+python main.py streets select_as_tuple '{"id":9}'
+python main.py streets select_as_dict '{"id":9}'
+
+
+*******************************************************
+Buildings
+*******************************************************
+Insert:
+python main.py buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+python main.py buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735001 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+
+
+Delete:
+python main.py buildings delete '{"id": 10}'
+
+Update:
+python main.py buildings update '{"id":9,"name":"Updated Valencia","description":"New description","area":200000000,"height":10,"category":"city","visitedAt":"2026-02-28","geom":"POLYGON((0 0,10 0,10 10,0 10,0 0))","epsg":25830}'
+
+Select:
+python main.py buildings select_as_tuple '{"id":"9"}'
+python main.py buildings select_as_dict '{"id":"9"}'
+
+
+*******************************************************
+poi
+*******************************************************
+Insert:
+python main.py poi insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"priority":1,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)","epsg":25830}'
+
+Delete:
+python main.py poi delete '{"id":14}'
+
+Update:
+python main.py poi update '{"id":14,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"priority":10,"visitedAt":"2026-02-28","geom":"POINT(727750 4370590)","epsg":25830}'
+
+Select
+python main.py poi select_as_dict '{"id":14}'
+python main.py poi select_as_tuple '{"id":14}'
