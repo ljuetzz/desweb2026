@@ -11,7 +11,7 @@ class POI(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=100)
     visitedAt = models.DateTimeField()
-    geom = models.GeometryField(srid=25830)
+    geom = models.PointField(srid=25830)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -25,7 +25,7 @@ class Street(models.Model):
     length = models.FloatField()
     category = models.CharField(max_length=100)
     visitedAt = models.DateTimeField()
-    geom = models.GeometryField(srid=25830)
+    geom = models.LineStringField(srid=25830)    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -41,7 +41,7 @@ class Building(models.Model):
     height = models.FloatField()
     category = models.CharField(max_length=100)
     visitedAt = models.DateTimeField()
-    geom = models.GeometryField(srid=25830)
+    geom = models.PolygonField(srid=25830)    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
