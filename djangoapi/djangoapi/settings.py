@@ -80,7 +80,9 @@ INSTALLED_APPS = [
     'codelist',
     'buildings',
     'flowers',
-    'accidentes'
+    'accidentes',
+    # the newly created app
+    'erasmus_valencia',
 ]
 
 MIDDLEWARE = [
