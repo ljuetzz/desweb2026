@@ -35,10 +35,13 @@ PgAdmin in our case has several databases, the database **practica** is used for
 
 <img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/9e70051d-ca52-4393-ac7d-ec9630ad5a13" />
 
-**IMPORTANT** You have to switch the database accordingly when you switch betwenn psycopg and Django because the project is set up like this at the moment!!!
-To do that go to env.dev and switch variable POSTGRES_DB accordingly and restart the containers afterwards:
+The database for the Django Project is set in the file .env.dev:
 
 <img width="463" height="155" alt="image" src="https://github.com/user-attachments/assets/9e0e99c3-bf89-4d18-be74-3e15e5a3f472" />
+
+The database for the psycopg part is set in scripts/p1/mylib/p1_settings.py
+<img width="459" height="271" alt="image" src="https://github.com/user-attachments/assets/84ae6add-1b8c-430a-93c6-fb7ff9d70192" />
+
 
 After finishing all tests or the programming the containers can be stopped with
 ````
