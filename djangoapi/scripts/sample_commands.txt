@@ -1,5 +1,5 @@
 *******************************************************
-Streets
+psycopg Streets
 *******************************************************
 Insert:
 python main.py streets insert '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
@@ -18,7 +18,7 @@ python main.py streets select_as_dict '{"id":9}'
 
 
 *******************************************************
-Buildings
+psycopg Buildings
 *******************************************************
 Insert:
 python main.py buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
@@ -37,7 +37,7 @@ python main.py buildings select_as_dict '{"id":"9"}'
 
 
 *******************************************************
-poi
+psycopg poi
 *******************************************************
 Insert:
 python main.py poi insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"priority":1,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)","epsg":25830}'
@@ -51,3 +51,30 @@ python main.py poi update '{"id":14,"name":"Updated Point","description":"Update
 Select
 python main.py poi select_as_dict '{"id":14}'
 python main.py poi select_as_tuple '{"id":14}'
+
+
+*******************************************************
+DJAGNO Buildings
+*******************************************************
+
+Insert:
+python manage.py runscript test_buildings --script-args buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+
+select_as_dict
+python manage.py runscript test_buildings --script-args buildings select_as_dict '{"id": 1}'
+
+Update:
+python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((728000 4380000,735000 4370000,735000 4380000,725000 4380000,728000 4380000))","epsg":25830}'
+
+Delete:
+python manage.py runscript test_buildings --script-args buildings delete '{"id": 1}'
+
+*******************************************************
+DJAGNO Streets
+*******************************************************
+
+Insert:
+python manage.py runscript test_buildings '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
+python manage.py runscript test_buildings '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)","epsg":25830}'
+python manage.py runscript test_buildings '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)","epsg":25830}'
+

@@ -23,13 +23,12 @@ class Street(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     length = models.FloatField()
+    lanes = models.IntegerField(default = 1)
     category = models.CharField(max_length=100)
     visitedAt = models.DateTimeField()
     geom = models.LineStringField(srid=25830)    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
 
     def __str__(self):
         return self.name
