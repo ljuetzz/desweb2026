@@ -59,6 +59,9 @@ DJAGNO Buildings
 
 Insert:
 python manage.py runscript test_buildings --script-args buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+python manage.py runscript test_buildings --script-args buildings insert '{"name":" Rectangle","description":"Approximate bounding box of Valencia","area":100000000.123456789,"height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000.123456789 4370000,735000 4370000,735000 4380000,725000 4380000,725000.123456789 4370000))"}'
+
+
 
 select_as_dict
 python manage.py runscript test_buildings --script-args buildings select_as_dict '{"id": 1}'
