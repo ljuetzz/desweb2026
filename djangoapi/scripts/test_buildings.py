@@ -1,6 +1,8 @@
 import json
 
 from scripts.p1.buildingsDjangoModels.building import Building
+from scripts.p1.streetsDjangoModels.street import Street
+
 
 def run(*args):
 
@@ -30,6 +32,15 @@ def run(*args):
             print(building.update(data))
         elif function_name=="delete":
             print(building.delete(data))
+    elif table_name == "streets":
+        street = Street()
+        if function_name=="insert":
+            print(street.insert(data))
+        elif function_name=="select_as_dict":
+            print(street.select_as_dict(data))
+        elif function_name=="update":
+            print(street.update(data))
+        elif function_name=="delete":
+            print(street.delete(data))
     elif table_name == "poi":
-        print("POI")
-        
+        print("POI is not implemented yet")

@@ -69,12 +69,22 @@ python manage.py runscript test_buildings --script-args buildings update '{"id":
 Delete:
 python manage.py runscript test_buildings --script-args buildings delete '{"id": 1}'
 
+
 *******************************************************
 DJAGNO Streets
 *******************************************************
 
 Insert:
-python manage.py runscript test_buildings '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
-python manage.py runscript test_buildings '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)","epsg":25830}'
-python manage.py runscript test_buildings '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)","epsg":25830}'
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)","epsg":25830}'
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)","epsg":25830}'
+
+Update:
+python manage.py runscript test_buildings --script-args streets update '{"id":1,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)","epsg":25830}'
+
+select_as_dict:
+python manage.py runscript test_buildings --script-args streets select_as_dict '{"id": 1}'
+
+Delete:
+python manage.py runscript test_buildings --script-args streets delete '{"id": 2}'
 
