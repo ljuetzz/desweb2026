@@ -58,16 +58,19 @@ DJAGNO Buildings
 *******************************************************
 
 Insert:
-python manage.py runscript test_buildings --script-args buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
-python manage.py runscript test_buildings --script-args buildings insert '{"name":" Rectangle","description":"Approximate bounding box of Valencia","area":100000000.123456789,"height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000.123456789 4370000,735000 4370000,735000 4380000,725000 4380000,725000.123456789 4370000))"}'
-
-
+python manage.py runscript test_buildings --script-args buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+python manage.py runscript test_buildings --script-args buildings insert '{"name":" Rectangle","description":"Approximate bounding box of Valencia","height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000.123456789 4370000,735000 4370000,735000 4380000,725000 4380000,725000.123456789 4370000))"}'
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building A\",\"description\":\"Test building near Valencia center\",\"height\":12,\"floors\":3,\"category\":\"residential\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((728100 4372100,728120 4372100,728120 4372120,728100 4372120,728100 4372100))\"}"
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building B\",\"description\":\"Office building Valencia\",\"height\":25,\"floors\":6,\"category\":\"office\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((729000 4373000,729030.1234567 4373000,729030 4373030,729000 4373030,729000 4373000))\"}"
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building C\",\"description\":\"Small commercial building\",\"height\":8,\"floors\":2,\"category\":\"commercial\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((727500 4371500,727520 4371500,727520 4371520,727500 4371520,727500 4371500))\"}"
 
 select_as_dict
 python manage.py runscript test_buildings --script-args buildings select_as_dict '{"id": 1}'
 
 Update:
-python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((728000 4380000,735000 4370000,735000 4380000,725000 4380000,728000 4380000))","epsg":25830}'
+python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((728000 4380000,735000 4370000,735000 4380000,725000 4380000,728000 4380000))"}'
+python manage.py runscript test_buildings --script-args buildings update '{"id": 3, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((1 0,1 1,0 1,0 0,1 0))"}'
+python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((727500 4371500,727520 4371500,727520 4371520,727500 4371520,727500 4371500))"}'
 
 Delete:
 python manage.py runscript test_buildings --script-args buildings delete '{"id": 1}'

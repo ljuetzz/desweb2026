@@ -7,10 +7,13 @@ from django.db import connection
 from djangoapi.settings import EPSG_FOR_GEOMETRIES, ST_SNAP_PRECISION
 
 
-
 class Building:
 
-    def _intersects(self, geom:GEOSGeometry, exclude_id: int = None) -> bool:
+    def _intersects(self, geom:GEOSGeometry, exclude_id: int = None) -> list:
+        '''
+        Checks if the geometry intersects with any other geometry in the building table. 
+        If it intersects return a list of the ids of the intersecting buildings, if it does not intersect return an empty list
+        '''
         #check if the geometry intersects any existing building
         cursor=connection.cursor()
 
@@ -24,9 +27,7 @@ class Building:
         cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
         result = cursor.fetchall()
 
-        if len(result)>0:
-            return True
-        return False
+        return result
 
 
     def _check_overlap(self, geom:GEOSGeometry, exclude_id: int = None) -> bool:
@@ -78,11 +79,13 @@ class Building:
                     "data": []
                 }
 
-            if self._intersects(geom):
+            intersections = self._intersects(geom)
+
+            if len(intersections) > 0:
                 return {
                     "ok": False,
-                    "message": "The geometry intersects with another building",
-                    "data": []
+                    "message": "The geometry intersects with other building(s) with the id(s) in data",
+                    "data": intersections
                 }
             
         
@@ -112,10 +115,9 @@ class Building:
 
             geom = GEOSGeometry(data["geom"], srid=EPSG_FOR_GEOMETRIES)
 
-
-
             # snap the geometry to a grid similiar to ST_SnapToGrid in postgis
             geom = self._snap_to_grid(geom)
+
 
              # check if the geom is valid, if it is not valid return an error message
             if not geom.valid:
@@ -123,6 +125,15 @@ class Building:
                     "ok": False,
                     "message": "Invalid geometry",
                     "data": []
+                }
+            
+            intersections = self._intersects(geom, exclude_id=id)
+
+            if len(intersections) > 0:
+                return {
+                    "ok": False,
+                    "message": "The geometry intersects with other building(s) with the id(s) in data",
+                    "data": intersections
                 }
 
             building_model.geom = geom
