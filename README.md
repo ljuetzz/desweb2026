@@ -44,6 +44,7 @@ The database for the psycopg part is set in scripts/p1/mylib/p1_settings.py
 
 
 After finishing all tests or the programming the containers can be stopped with
+
 ````
 docker compose down
 ````
@@ -183,7 +184,12 @@ How Django maps models → database tables
 **TIP** If you have time, try to create a new django app inside the project to understand what has to be done, as this will give you a good overlook and understanding.
 
 
+## 10 . What to do in the exam ?
 
+1. Start the Docker Containers
+2. Open a Terminal inside the django api container
+3. Show how to Insert, Delete, Update, Select with Psycopg, commands for that are in sample_commands.txt
+4. Show how to Insert, Delete, Update, Select with Django, commands for that are in sample_commands.txt
 
 
 
