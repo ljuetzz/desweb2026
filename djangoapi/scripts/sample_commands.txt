@@ -99,13 +99,15 @@ DJAGNO POI
 *******************************************************
 
 Insert:
-python manage.py runscript test_buildings --script-args poi insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)","epsg":25830}'
+python manage.py runscript test_buildings --script-args poi insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)"}'
+python manage.py runscript test_buildings --script-args poi insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"visitedAt":"2026-02-26","geom":"POINT(727725 4370575)"}'
 
 Delete:
 python manage.py runscript test_buildings --script-args poi delete '{"id":1}'
 
 Update:
-python manage.py runscript test_buildings --script-args poi update '{"id":1,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"visitedAt":"2026-02-28","geom":"POINT(727750 4370590)","epsg":25830}'
+python manage.py runscript test_buildings --script-args poi update '{"id":1,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"visitedAt":"2026-02-28","geom":"POINT(727750 4370590)"}'
+python manage.py runscript test_buildings --script-args poi update '{"id":3,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"visitedAt":"2026-02-28","geom":"POINT(727722 4370576)"}'
 
 Select
 python manage.py runscript test_buildings --script-args poi select_as_dict '{"id":1}'
