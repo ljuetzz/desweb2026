@@ -76,7 +76,7 @@ class Building():
             return {
                 "ok": True,
                 "message": "Building inserted successfully.",
-                "data": row  
+                "data": [row]
             }
 
 
@@ -122,7 +122,7 @@ class Building():
             return {
                 "ok": True,
                 "message": f"Building with id {id} selected",
-                "data": rows
+                "data": [rows]
             }
         
         except Exception as e:
@@ -167,7 +167,7 @@ class Building():
             return {
                 "ok": True,
                 "message": f"Building with id {id} selected",
-                "data": rows
+                "data": [rows]
             }
         
         except Exception as e:
@@ -229,10 +229,10 @@ class Building():
             ]
 
             self.cursor.execute(sql, values)
-            row =  self.cursor.fetchall()
+            row =  self.cursor.fetchone()
             self.connection.commit()
 
-            if len(row) == 0:
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"No building found at id {values[-1]}. No building was updated",
@@ -242,7 +242,7 @@ class Building():
             return {
                 "ok": True,
                 "message": f"building at id {values[-1]} updated.",
-                "data": row
+                "data": [row]
             }
         
         except Exception as e:
@@ -268,14 +268,15 @@ class Building():
                     data.buildings  
                 WHERE
                     id=%s
+                RETURNING id;
                 """
             # As there are 5 %s, you need a list with 5 values: 
             #   [description, area, the_geom_wkt, the_epsg_code, 
             #           the_id_to_select_the_row]
             self.cursor.execute(sql, [id])
-            rows = self.cursor.rowcount
+            row = self.cursor.fetchone()
             
-            if rows == 0:
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"No building found at id {id}. No buidlings were deleted",
@@ -286,10 +287,8 @@ class Building():
             self.connection.commit()
             return {
                 "ok": True,
-                "message": f"Building at id {id} deleted.",
-                "data": {
-                    "rows_deleted": rows
-                }
+                "message": f"Row(s) deleted.",
+                "data": [row]
             }
        
         except Exception as e:
