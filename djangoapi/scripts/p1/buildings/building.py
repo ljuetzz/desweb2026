@@ -224,7 +224,8 @@ class Building():
                 data["visitedAt"],
                 data["geom"],
                 data["epsg"],
-                data["id"]
+                data["id"],
+                data["id"],
             ]
 
             self.cursor.execute(sql, values)
@@ -287,7 +288,7 @@ class Building():
                 "ok": True,
                 "message": f"Building at id {id} deleted.",
                 "data": {
-                    "rows_deleted": len(rows)
+                    "rows_deleted": rows
                 }
             }
        
