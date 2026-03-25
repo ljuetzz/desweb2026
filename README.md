@@ -121,6 +121,7 @@ The file `main.py` contains the implementation of database operations using **ps
 This file has to be run like the following from the **Container Console!!!***
 
 Be sure to navigate to the folder ````scripts/p1```` first and start main.py from there!
+
 <img width="324" height="35" alt="image" src="https://github.com/user-attachments/assets/b2adcfa9-3d6b-49e8-91ab-f2a36d0607ae" />
 
 
