@@ -70,7 +70,7 @@ class Poi():
             return {
                 "ok": True,
                 "message": "Poi inserted successfully.",
-                "data": [row]   # always list of dicts
+                "data": [row]  
             }
 
         except Exception as e:
@@ -96,15 +96,16 @@ class Poi():
                     data.poi
                 WHERE
                     id=%s
+                RETURNING id;
                 """
             # As there are 5 %s, you need a list with 5 values: 
             #   [description, area, the_geom_wkt, the_epsg_code, 
             #           the_id_to_select_the_row]
             
             self.cursor.execute(cons, [id])
-            num_rows = self.cursor.rowcount
+            row = self.cursor.fetchone()
 
-            if num_rows == 0:
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"No poi found at id {id}. No poi was deleted",
@@ -116,9 +117,7 @@ class Poi():
             return {
                 "ok": True,
                 "message": f"poi at id {id} deleted.",
-                "data": {
-                    "rows_deleted": num_rows
-                }
+                "data": [row]
             }
         
         except Exception as e:
@@ -177,9 +176,9 @@ class Poi():
             ]
 
             self.cursor.execute(sql, values)
-            row =  self.cursor.fetchall()
+            row =  self.cursor.fetchone()
 
-            if len(row) == 0:
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"Poi not updated. Its probably not within an existing polygon",
@@ -191,9 +190,7 @@ class Poi():
             return {
                 "ok": True,
                 "message": f"poi at id {values[-1]} updated.",
-                "data": {
-                    "rows_updated": len(row)
-                }
+                "data": [row]
             }
         
         except Exception as e:
@@ -238,7 +235,7 @@ class Poi():
             return {
                 "ok": True,
                 "message": f"poi with id {id} selected",
-                "data": row
+                "data": [row]
             }
         
         except Exception as e:
@@ -281,7 +278,7 @@ class Poi():
             return {
                 "ok": True,
                 "message": f"poi with id {id} selected",
-                "data": row
+                "data": [row]
             }
         
         except Exception as e:
