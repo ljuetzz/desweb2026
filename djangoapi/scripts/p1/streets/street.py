@@ -72,7 +72,7 @@ class Street():
                 return {
                     "ok": True,
                     "message": "Street Inserted.",
-                    "data": row   # always list of dicts
+                    "data": [row]   
                 }
 
             except Exception as e:
@@ -97,13 +97,16 @@ class Street():
                     data.streets  
                 WHERE
                     id=%s
+                RETURNING id;
                 """
 
             values= [int(data["id"])]
             self.cursor.execute(cons, values)
             self.connection.commit()
 
-            if self.cursor.rowcount == 0:
+            row = self.cursor.fetchone()
+
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"No streets found at id {values[-1]}. No streets were deleted",
@@ -113,8 +116,9 @@ class Street():
             return {
                 "ok": True,
                 "message": f"Street at id {values[-1]} deleted.",
-                "data": {"rows_deleted": self.cursor.rowcount}
+                "data": [row]
             }
+        
         except Exception as e:
             self.connection.rollback()
             return {
@@ -174,10 +178,10 @@ class Street():
             ]
 
             self.cursor.execute(sql, values)
-            rows = self.cursor.fetchall()
+            row = self.cursor.fetchone()
             self.connection.commit()
 
-            if len(rows) == 0:
+            if row is None:
                 return {
                     "ok": True,
                     "message": f"No street found at id {values[-1]}. No street was updated.",
@@ -187,9 +191,7 @@ class Street():
             return {
                 "ok": True,
                 "message": f"Data updated",
-                "data": {
-                    "rows_updated": len(rows)
-                }
+                "data": [row]
             }
         
         except Exception as e:
@@ -233,7 +235,7 @@ class Street():
             return {
                 "ok": True,
                 "message": f"Street at id {id} retrieved successfully!",
-                "data": rows
+                "data": [rows]
             }
 
         except Exception as e:
@@ -264,9 +266,9 @@ class Street():
             id = int(data["id"])
 
             self.cursor.execute(sql, [id])
-            rows = self.cursor.fetchone()
+            row = self.cursor.fetchone()
 
-            if not rows:
+            if not row:
                 return {
                     "ok": True,
                     "message": f"No street found at id {id}",
@@ -276,7 +278,7 @@ class Street():
             return {
                 "ok": True,
                 "message": f"Street at id {id} retrieved successfully!",
-                "data": rows
+                "data": [row]
             }
 
         except Exception as e:
