@@ -64,7 +64,7 @@ class POI:
             query = """
                 SELECT 1
                 FROM erasmus_valencia_building
-                WHERE ST_Intersects(geom, ST_GeomFromText(%s, %s))
+                WHERE ST_Within(ST_GeomFromText(%s, %s), geom)
             """
             cursor = connection.cursor()
             cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
@@ -100,7 +100,13 @@ class POI:
         try:
             id= data['id']
             # get the poiModel instance with the id of the poi we want to update
-            poi=list(POIModel.objects.filter(id=id))[0]
+            poi = POIModel.objects.filter(id=id).first()
+            if poi is None:
+                return {
+                    "ok": False,
+                    "message": f"POI with id {id} not found",
+                    "data": []
+    }
 
             # update all the data
             poi.name = data['name']
@@ -127,6 +133,24 @@ class POI:
                     "message": "The Point is identical to another geometry in the poi table: The same point already exists!",
                     "data": []
                 }
+            
+            # to see wether the poi is inside a building we run this query
+            query = """
+                SELECT 1
+                FROM erasmus_valencia_building
+                WHERE ST_Within(ST_GeomFromText(%s, %s), geom)
+            """
+            cursor = connection.cursor()
+            cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+            
+            if cursor.fetchone() is None:
+                # ask the user if he really wants to insert a point outside of buildings
+                if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+                    return {
+                        "ok": False,
+                        "message": "The Point is not located within any building, aborted by user",
+                        "data": []
+                    }
 
             poi.geom = geom
         

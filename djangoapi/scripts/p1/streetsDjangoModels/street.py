@@ -53,12 +53,23 @@ class Street:
             # snap the geometry to a grid to avoid precision issues 
             geom = self._snap_to_grid(geom)
 
-            intersection_list = self._intersects(geom)
+            query = """
+                SELECT id
+                FROM erasmus_valencia_street    
+                WHERE ST_Intersects(ST_GeomFromText(%s, %s), geom)
+            """
+            cursor = connection.cursor()
+            cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+            result = cursor.fetchall()
+
+
+
+            #intersection_list = self._intersects(geom)
 
             # check if the geometry intersects with any other geometry in the street table, if it does intersect ask the user if they want to insert it anyway
             # streets can actually intersect so its not an error, but we want to warn the user about it
-            if len(intersection_list) > 0:
-                insert = input(f"The geometry intersects with another street at id(s) {intersection_list} Do you want to insert it anyway? (y/n)") == "y"
+            if len(result) > 0:
+                insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
 
                 if not insert:
                     return {
@@ -112,6 +123,26 @@ class Street:
                     "message": "Invalid geometry",
                     "data": []
                 }
+
+            query = """
+                SELECT id
+                FROM erasmus_valencia_street    
+                WHERE ST_Intersects(ST_GeomFromText(%s, %s), geom) AND id <> %s
+            """
+            cursor = connection.cursor()
+            cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES, id])
+            result = cursor.fetchall()
+
+            if len(result) > 0:
+                insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
+
+                if not insert:
+                    return {
+                        "ok": False,
+                        "message": "The geometry intersects with another street, aborted by user.",
+                        "data": []
+                    }
+
 
             street.geom = geom
         
