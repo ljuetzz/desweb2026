@@ -60,6 +60,25 @@ class POI:
                     "data": []
                 }
             
+            # to see wether the poi is inside a building we run this query
+            query = """
+                SELECT 1
+                FROM erasmus_valencia_building
+                WHERE ST_Intersects(geom, ST_GeomFromText(%s, %s))
+            """
+            cursor = connection.cursor()
+            cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+            
+            if cursor.fetchone() is None:
+                # ask the user if he really wants to insert a point outside of buildings
+                if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+                    return {
+                        "ok": False,
+                        "message": "The Point is not located within any building, aborted by user",
+                        "data": []
+                    }
+
+            
             if self._check_identical(geom):
                 return {
                     "ok": False,
