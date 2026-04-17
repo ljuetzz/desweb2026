@@ -10,7 +10,7 @@ Delete:
 python main.py streets delete '{"id": "10"}'
 
 Update:
-python main.py streets update '{"id":12,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)","epsg":25830}'
+python main.py streets update '{"id":2,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)","epsg":25830}'
 
 Select:
 python main.py streets select_as_tuple '{"id":9}'
