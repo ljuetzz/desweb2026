@@ -17,4 +17,12 @@ urlpatterns = [
     path("buildings/", views.BuildingView.as_view()),
     path("buildings/<str:action>/", views.BuildingView.as_view(), name='buildings_views'),  # POST requests
     path("buildings/<str:action>/<int:id>/", views.BuildingView.as_view(), name='buildings_views'),  # POST requests
+
+    path("streets/", views.StreetView.as_view()),
+    path("streets/<str:action>/", views.StreetView.as_view(), name='streets_views'),  # POST requests
+    path("streets/<str:action>/<int:id>/", views.StreetView.as_view(), name='streets_views'),  # POST requests
+
+    path("pois/", views.POIView.as_view()),
+    path("pois/<str:action>/", views.POIView.as_view(), name='pois_views'),  # POST requests
+    path("pois/<str:action>/<int:id>/", views.POIView.as_view(), name='pois_views'),  # POST requests
 ]

@@ -67,3 +67,81 @@ class BuildingView(View):
             return JsonResponse(building.delete(data), status=200)
         else:            
             return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
+    
+class StreetView(View):
+
+    def get(self, request, **kwargs):
+
+        street = Street()
+
+        action = kwargs.get('action', None)
+        if action == 'selectone':
+            id = kwargs.get('id', None)
+            return JsonResponse(street.selectOne(id), status=200)
+        elif action == 'selectall':
+            return JsonResponse(street.selectAll(), status=200)
+        else:
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'selectone' and 'selectall' are allowed with GET requests!", "data":[]},status=200)
+    
+    def post(self, request, **kwargs):
+
+        action = kwargs.get('action', None)
+        street = Street()
+
+        data = {}
+        data['id'] = request.POST.get('id', None)
+        print(f"data id: {data['id']}")
+        data['name'] = request.POST.get('name', None)
+        data['geom'] = request.POST.get('geom', None)
+        data['visitedAt'] = request.POST.get('visitedAt', None)
+        data['description'] = request.POST.get('description', None)
+        data['length'] = request.POST.get('length', None)
+        data['lanes'] = request.POST.get('lanes', None)
+        data['category'] = request.POST.get('category', None)
+
+        if action == 'insert':
+            return JsonResponse(street.insert(data), status=200)
+        elif action == 'update':
+            return JsonResponse(street.update(data), status=200)
+        elif action == 'delete':
+            id = kwargs.get('id', None)
+            return JsonResponse(street  .delete(data), status=200)
+        else:            
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
+        
+class POIView(View):
+
+    def get(self, request, **kwargs):
+
+        poi = POI()
+
+        action = kwargs.get('action', None)
+        if action == 'selectone':
+            id = kwargs.get('id', None)
+            return JsonResponse(poi.selectOne(id), status=200)
+        elif action == 'selectall':
+            return JsonResponse(poi.selectAll(), status=200)
+        else:
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'selectone' and 'selectall' are allowed with GET requests!", "data":[]},status=200)
+    
+    def post(self, request, **kwargs):
+
+        action = kwargs.get('action', None)
+        poi = POI()
+
+        data = {}
+        data['name'] = request.POST.get('name', None)
+        data['description'] = request.POST.get('description', None)
+        data['visitedAt'] = request.POST.get('visitedAt', None)
+        data['category'] = request.POST.get('category', None)
+        data['geom'] = request.POST.get('geom', None)
+
+        if action == 'insert':
+             return JsonResponse(poi.insert(data), status=200)
+        elif action == 'update':
+            return JsonResponse(poi.update(data), status=200)
+        elif action == 'delete':
+            id = kwargs.get('id', None)
+            return JsonResponse(poi  .delete(data), status=200)
+        else:            
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
