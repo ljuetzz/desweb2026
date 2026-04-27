@@ -76,8 +76,9 @@ class StreetView(View):
 
         action = kwargs.get('action', None)
         if action == 'selectone':
-            id = kwargs.get('id', None)
-            return JsonResponse(street.selectOne(id), status=200)
+            data = {}
+            data['id'] = request.GET.get('id', None)
+            return JsonResponse(street.selectOne(data), status=200)
         elif action == 'selectall':
             return JsonResponse(street.selectAll(), status=200)
         else:
@@ -117,8 +118,9 @@ class POIView(View):
 
         action = kwargs.get('action', None)
         if action == 'selectone':
-            id = kwargs.get('id', None)
-            return JsonResponse(poi.selectOne(id), status=200)
+            data = {}
+            data['id'] = request.GET.get('id', None)
+            return JsonResponse(poi.selectOne(data), status=200)
         elif action == 'selectall':
             return JsonResponse(poi.selectAll(), status=200)
         else:

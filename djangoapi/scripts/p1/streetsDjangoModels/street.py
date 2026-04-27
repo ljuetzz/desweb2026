@@ -7,6 +7,37 @@ from django.db import connection
 
 class Street:
 
+    def selectOne(self, data:dict) -> dict:
+        '''
+        Selects one street by id. this was implemented for evaluation 2 and is called in views.py
+        '''
+        id = data.get('id', None)
+        if id is None:
+            return {"ok": False, "message": "ID is required", "data": []}
+        try:
+            street_model = StreetModel.objects.get(id=id)
+            data = model_to_dict(street_model)
+            data["geom"] = street_model.geom.wkt
+            return {"ok": True, "message": "Street found", "data": data}
+        except StreetModel.DoesNotExist:
+            return {"ok": False, "message": "Street not found", "data": []}
+
+    def selectAll(self) -> dict:
+        '''
+        Selects all streets via View. This was implemented for Evalution 2 as part of the django api and is called in views.py
+        '''
+        try:
+            street_models = StreetModel.objects.all()
+            data = [model_to_dict(street_model) for street_model in street_models]
+
+            for street in data:
+                street["geom"] = street["geom"].wkt
+
+            return {"ok": True, "message": "Streets found", "data": data}
+        except Exception as e:
+            return {"ok": False, "message": f"An error occurred: {str(e)}", "data": []}
+
+    
     def _intersects(self, geom:GEOSGeometry, exclude_id: int = None) -> list:
         '''
         Checks if the geometry intersects with any other geometry in the street table. 
@@ -37,6 +68,10 @@ class Street:
 
     def insert(self, data:dict) -> dict:
 
+        '''
+        Inserts a street into the database. allow_intersections is a parameter that allows to insert a street even if it intersects with another street. This is set to true by default because streets can actually intersect, but it can be set to false to prevent intersections.
+        '''
+
         try: 
             street_model = StreetModel()
             street_model.name = data['name']
@@ -44,7 +79,6 @@ class Street:
             street_model.description = data['description']
             street_model.length = data['length']
             street_model.lanes = data['lanes']
-
             street_model.visitedAt = data['visitedAt']
 
             # create the geom from wkt 
@@ -62,21 +96,32 @@ class Street:
             cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
             result = cursor.fetchall()
 
-
+            # allow intersections is a parameter passed in the body
+            allow_intersections = False
+            if data.get('allow_intersections', None) is not None:
+                allow_intersections = data['allow_intersections'] in ['true', 'True', 'TRUE', True]
 
             #intersection_list = self._intersects(geom)
 
             # check if the geometry intersects with any other geometry in the street table, if it does intersect ask the user if they want to insert it anyway
             # streets can actually intersect so its not an error, but we want to warn the user about it
             if len(result) > 0:
-                insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
 
-                if not insert:
+                if not allow_intersections:
                     return {
                         "ok": False,
-                        "message": "The geometry intersects with another street, aborted by user.",
+                        "message": f"The geometry intersects with another street at id(s) {result}, insertion aborted. If you want to allow intersections, set the 'allow_intersections' parameter to true in the request body.",
                         "data": []
                     }
+                
+                # insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
+
+               #if not insert:
+               #    return {
+               #        "ok": False,
+               #        "message": "The geometry intersects with another street, aborted by user.",
+               #        "data": []
+               #    }
 
             # check if the geom is valid, if it is not valid return an error message
             if not geom.valid:

@@ -8,6 +8,31 @@ from djangoapi.settings import EPSG_FOR_GEOMETRIES, ST_SNAP_PRECISION
 
 class POI:
 
+    def selectOne(self, data:dict) -> dict:
+        '''
+        This was implemented in evaluation 2 for the django api and is called in views.py
+        '''
+        id = data.get('id', None)
+        if id is None:
+            return {"ok": False, "message": "ID is required as a parameter", "data": []}
+        try:
+            poi_model = POIModel.objects.get(id=id)
+            return {"ok": True, "message": "POI found", "data": [model_to_dict(poi_model)]}
+        except POIModel.DoesNotExist:
+            return {"ok": False, "message": "POI not found", "data": []}
+    
+    def selectAll(self) -> dict:
+        '''
+        This was implemented in evaluation 2 for the django api and is called in views.py
+        '''
+        try:
+            poi_models = POIModel.objects.all()
+            data = [model_to_dict(poi_model) for poi_model in poi_models]
+            return {"ok": True, "message": "POIs found", "data": data}
+        except Exception as e:
+            return {"ok": False, "message": f"An error occurred: {str(e)}", "data": []}
+
+
 
     def _check_identical(self, geom:GEOSGeometry, exclude_id: int = None) -> bool:
 
