@@ -30,8 +30,15 @@ def custom_logout_view(request):
     return redirect("/accounts/login/")  # O a donde desees redirigir después del logout
 
 class HelloWord(View):
+    
     def get(self, request):
-        return JsonResponse({"ok":True,"message": "Buildings. Hello world", "data":[]})
+        return JsonResponse({"ok":True,"message": "Buildings. Hello world", "data":[request.POST.dict()]}, status=200)
+    
+    def post(self, request):
+        d={}
+        d['id'] = request.POST.get('id', None)
+        d['area'] = request.POST.get('area', None)
+        return JsonResponse({"ok":True,"message": "Buildings. Hello world", "data": [d]}, status=200)
 
 class BuildigsView(LoginRequiredMixin, BaseDjangoView):
     """

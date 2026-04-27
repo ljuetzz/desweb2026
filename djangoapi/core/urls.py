@@ -7,7 +7,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path("hello_world/", views.HelloWord.as_view(),name="hello_world"),
-    path('', include(router.urls)),
+    #path('', include(router.urls)),
     path('not_loggedin/', views.notLoggedIn, name="not_loggedin"),
     path('login/', views.LoginView.as_view(),name="core_login"),
     path('logout/', views.LogoutView.as_view(),name="core_logout"),
@@ -21,4 +21,6 @@ urlpatterns = [
     path('is_valid_token/', viewsKnoxLoginManagenent.IsValidToken.as_view(), name='is_valid_token'),
     path('logout_all_user_sessions/', viewsKnoxLoginManagenent.LogoutAllUserSessionsView.as_view(), name='logout_all_user_sessions'),
     path('logout_all_users_sessions/', viewsKnoxLoginManagenent.LogoutAllUsersSessionsView.as_view(), name='logout_all_users_sessionst'),
+    path("api/", include(router.urls)),
+
 ]

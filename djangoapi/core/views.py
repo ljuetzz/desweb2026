@@ -27,7 +27,12 @@ def notLoggedIn(request):
 
 class HelloWord(View):
     def get(self, request):
-        return JsonResponse({"ok":True,"message": "Core. Hello world", "data":[]},status=200)
+        return JsonResponse({"ok":True,"message": "Core. Hello world get request", "data":[]},status=200)
+    def post(self, request):
+        d={}
+        d['id'] = request.POST.get('id', None)
+        d['area'] = request.POST.get('area', None)
+        return JsonResponse({"ok":True,"message": "Core. Hello world post request", "data": [d]}, status=200)
 
 class LoginView(View):
     def post(self, request, *args, **kwargs):

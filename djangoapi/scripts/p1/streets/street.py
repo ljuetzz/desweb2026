@@ -37,14 +37,15 @@ class Street():
                     ) sub
                     WHERE
                         ST_IsValid(g)
-                        AND NOT EXISTS (
-                            SELECT 1
-                            FROM data.streets s
-                            WHERE ST_Intersects(s.geom, g)
-                        )
+
                     RETURNING id;
                     """
+                # HERE ST_Intersects(s.geom, g)
+                #                        AND NOT EXISTS (
+                #            SELECT 1
+                #            FROM data.streets s
 
+                 #       )
                 values = [
                     data["name"],
                     data["description"],

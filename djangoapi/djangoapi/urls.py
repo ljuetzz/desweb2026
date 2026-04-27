@@ -41,4 +41,5 @@ urlpatterns = [
     path('buildings/', include('buildings.urls')),
     path('flowers/', include('flowers.urls')),
     path('accidentes/', include('accidentes.urls')),
+    path('erasmus_valencia/', include('erasmus_valencia.urls')),
 ]
