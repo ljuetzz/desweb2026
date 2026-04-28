@@ -9,13 +9,13 @@ from djangoapi.settings import EPSG_FOR_GEOMETRIES, ST_SNAP_PRECISION
 
 class Building:
 
-    def selectOne(self, id:int) -> dict:
+    def selectOne(self, data:dict) -> dict:
         '''
         Selects one building with the given id. This method is used in the views.py and is a later implementation for the django API
         At first we selected with select_as_dict.
         '''
         try:
-            building = list(BuildingModel.objects.filter(id=id))[0]
+            building = list(BuildingModel.objects.filter(id=data['id']))[0]
             data = model_to_dict(building)
             data["geom"] = building.geom.wkt
             return {'ok':True, 'message':'Data retrieved', 'data':data}

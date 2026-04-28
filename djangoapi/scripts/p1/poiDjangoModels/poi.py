@@ -16,8 +16,11 @@ class POI:
         if id is None:
             return {"ok": False, "message": "ID is required as a parameter", "data": []}
         try:
+            # geometry is not serializable so we convert to wkt
             poi_model = POIModel.objects.get(id=id)
-            return {"ok": True, "message": "POI found", "data": [model_to_dict(poi_model)]}
+            poi_dict = model_to_dict(poi_model)
+            poi_dict["geom"] = poi_model.geom.wkt
+            return {"ok": True, "message": "POI found", "data": [poi_dict]}
         except POIModel.DoesNotExist:
             return {"ok": False, "message": "POI not found", "data": []}
     
@@ -26,8 +29,14 @@ class POI:
         This was implemented in evaluation 2 for the django api and is called in views.py
         '''
         try:
+
             poi_models = POIModel.objects.all()
             data = [model_to_dict(poi_model) for poi_model in poi_models]
+
+            # convert the geometry to wkt to make it serializable
+            for poi_dict in data:
+                poi_dict["geom"] = poi_dict["geom"].wkt
+
             return {"ok": True, "message": "POIs found", "data": data}
         except Exception as e:
             return {"ok": False, "message": f"An error occurred: {str(e)}", "data": []}
@@ -93,15 +102,28 @@ class POI:
             """
             cursor = connection.cursor()
             cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+
+            # check if the user allows to insert a point outside of buildings
+            allow_outside_building = False
+            if data.get('allow_outside_building', None) is not None:
+                allow_outside_building = data['allow_outside_building'] in ['true', 'True', 'TRUE', True]
             
             if cursor.fetchone() is None:
-                # ask the user if he really wants to insert a point outside of buildings
-                if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+
+                if not allow_outside_building:
                     return {
                         "ok": False,
-                        "message": "The Point is not located within any building, aborted by user",
+                        "message": "The Point is not located within any building, and allow_outside_building is not set to true, aborted!",
                         "data": []
                     }
+                
+                # ask the user if he really wants to insert a point outside of buildings
+                #if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+                #    return {
+                #        "ok": False,
+                #        "message": "The Point is not located within any building, aborted by user",
+                #        "data": []
+                #    }
 
             
             if self._check_identical(geom):
@@ -131,7 +153,7 @@ class POI:
                     "ok": False,
                     "message": f"POI with id {id} not found",
                     "data": []
-    }
+                }
 
             # update all the data
             poi.name = data['name']
@@ -167,15 +189,29 @@ class POI:
             """
             cursor = connection.cursor()
             cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+
+            # check wether the user allows to insert a point outside of buildings
+            allow_outside_building = False
+            if data.get('allow_outside_building', None) is not None:
+                allow_outside_building = data['allow_outside_building'] in ['true', 'True', 'TRUE', True]
+
             
             if cursor.fetchone() is None:
-                # ask the user if he really wants to insert a point outside of buildings
-                if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+                
+                if not allow_outside_building:
                     return {
                         "ok": False,
-                        "message": "The Point is not located within any building, aborted by user",
+                        "message": "The Point is not located within any building, and allow_outside_building is not set to true, aborted!",
                         "data": []
                     }
+                
+                # ask the user if he really wants to insert a point outside of buildings
+                #if input("The Point is not located within any building. Do you want to insert it anyway? (y/n)") != "y":
+                #    return {
+                #        "ok": False,
+                #        "message": "The Point is not located within any building, aborted by user",
+                #        "data": []
+                #    }
 
             poi.geom = geom
         

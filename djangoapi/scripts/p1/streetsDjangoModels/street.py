@@ -143,6 +143,8 @@ class Street:
     
     def update(self, data:dict) -> dict:
 
+        print(f"update data: {data}")
+
         try:
             id= data['id']
             # get the streetModel instance with the id of the street we want to update
@@ -154,8 +156,12 @@ class Street:
             street.description = data['description']
             street.length = data['length']
             street.lanes = data['lanes']
-
             street.visitedAt = data['visitedAt']
+
+            # check if intersections are allowed
+            allow_intersections = False
+            if data.get('allow_intersections', None) is not None:
+                allow_intersections = data['allow_intersections'] in ['true', 'True', 'TRUE', True]
 
             # check if the geom is valid, if it is not valid return an error message
             geom = GEOSGeometry(data["geom"], srid=EPSG_FOR_GEOMETRIES)
@@ -179,15 +185,22 @@ class Street:
             result = cursor.fetchall()
 
             if len(result) > 0:
-                insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
 
-                if not insert:
+                if not allow_intersections:
                     return {
                         "ok": False,
-                        "message": "The geometry intersects with another street, aborted by user.",
+                        "message": f"The geometry intersects with another street at id(s) {result}, insertion aborted. If you want to allow intersections, set the 'allow_intersections' parameter to true in the request body.",
                         "data": []
                     }
+                
+                # insert = input(f"The geometry intersects with another street at id(s) {result} Do you want to insert it anyway? (y/n)") == "y"
 
+               #if not insert:
+               #    return {
+               #        "ok": False,
+               #        "message": "The geometry intersects with another street, aborted by user.",
+               #        "data": []
+               #    }
 
             street.geom = geom
         
