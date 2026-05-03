@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'accidentes',
     # the newly created app
     'erasmus_valencia',
+    'webcrud',
 ]
 
 MIDDLEWARE = [
