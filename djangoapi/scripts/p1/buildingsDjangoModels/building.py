@@ -45,15 +45,30 @@ class Building:
         '''
         #check if the geometry intersects any existing building
         cursor=connection.cursor()
+        
+        if exclude_id is None:
+            query = """
+                SELECT id FROM erasmus_valencia_building 
+                WHERE ST_Intersects(
+                    geom,
+                    ST_GeomFromText(%s, %s)
+                ) 
+            """
 
-        query = """
-            SELECT id FROM erasmus_valencia_building 
-            WHERE ST_Intersects(
-                geom,
-                ST_GeomFromText(%s, %s)
+            cursor.execute(
+                query,
+                [geom.wkt, EPSG_FOR_GEOMETRIES]
             )
-        """
-        cursor.execute(query, [geom.wkt, EPSG_FOR_GEOMETRIES])
+        else:
+            query = """
+                SELECT id FROM erasmus_valencia_building 
+                WHERE id != %s AND ST_Intersects(
+                    geom,
+                    ST_GeomFromText(%s, %s)
+                ) 
+            """
+            cursor.execute(query, [exclude_id, geom.wkt, EPSG_FOR_GEOMETRIES])
+            
         result = cursor.fetchall()
 
         return result
@@ -161,7 +176,7 @@ class Building:
             if len(intersections) > 0:
                 return {
                     "ok": False,
-                    "message": "The geometry intersects with other building(s) with the id(s) in data",
+                    "message": f"The geometry intersects with other building(s) with the id(s) in data. datatype of id {type(id)}",
                     "data": intersections
                 }
 
