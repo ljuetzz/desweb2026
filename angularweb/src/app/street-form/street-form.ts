@@ -112,7 +112,14 @@ export class StreetForm {
 
   selectAll() {
     this.api.selectAll('street').subscribe((res: any) => {
-      this.manageAnswer(res);
+      let serverAnswer = res as ServerAnswer;
+      this.answer = JSON.stringify(serverAnswer, null, 2);
+
+      if (serverAnswer.ok) {
+        this.message = serverAnswer.message;
+      } else {
+        this.message = 'Error: ' + serverAnswer.message;
+      }
     });
   }
 
