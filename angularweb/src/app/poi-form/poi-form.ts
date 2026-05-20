@@ -15,6 +15,7 @@ export class PoiForm {
 
   message = '';
   answer = '';
+  pois: Poi[] = [];
 
   id = new FormControl(1, Validators.required);
   name = new FormControl('', Validators.required);
@@ -111,6 +112,7 @@ export class PoiForm {
 
       if (serverAnswer.ok) {
         this.message = serverAnswer.message;
+        this.pois = serverAnswer.data as Poi[];
       } else {
         this.message = 'Error: ' + serverAnswer.message;
       }
@@ -151,5 +153,10 @@ export class PoiForm {
         this.message = 'POI deleted with id ' + idValue;
       }
     });
+  }
+
+  setDataInForm(poi: any) {
+    this.putPoiInForm(poi);
+    this.message = 'POI selected from table with id ' + poi.id;
   }
 }

@@ -14,7 +14,8 @@ export class BuildingForm {
 
   message = '';
   answer = '';
-
+  buildings: Building[] = [];
+  
   id = new FormControl(1, Validators.required);
   name = new FormControl('', Validators.required);
   description = new FormControl('', Validators.required);
@@ -116,10 +117,16 @@ export class BuildingForm {
 
       if (serverAnswer.ok) {
         this.message = serverAnswer.message;
-        } else {
+        this.buildings = serverAnswer.data as Building[];
+      } else {
         this.message = 'Error: ' + serverAnswer.message;
-        }
-      });
+      }
+    });
+  }
+  
+  setDataInForm(building: any) {
+    this.putBuildingInForm(building);
+    this.message = 'Building selected from table with id ' + building.id;
   }
 
   selectOne() {

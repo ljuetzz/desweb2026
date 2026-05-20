@@ -37,3 +37,24 @@ pre {
   white-space: pre-wrap;
   border-radius: 6px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border: 1px solid #cccccc;
+  padding: 6px;
+  text-align: left;
+}
+
+tr {
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: #eeeeee;
+}

@@ -15,7 +15,8 @@ export class StreetForm {
 
   message = '';
   answer = '';
-
+  streets: Street[] = [];
+  
   id = new FormControl(1, Validators.required);
   name = new FormControl('', Validators.required);
   description = new FormControl('', Validators.required);
@@ -117,6 +118,7 @@ export class StreetForm {
 
       if (serverAnswer.ok) {
         this.message = serverAnswer.message;
+        this.streets = serverAnswer.data as Street[];
       } else {
         this.message = 'Error: ' + serverAnswer.message;
       }
@@ -157,5 +159,10 @@ export class StreetForm {
         this.message = 'Street deleted with id ' + idValue;
       }
     });
+  }
+
+  setDataInForm(street: any) {
+    this.putStreetInForm(street);
+    this.message = 'Street selected from table with id ' + street.id;
   }
 }

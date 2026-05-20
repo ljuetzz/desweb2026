@@ -54,3 +54,22 @@
 
 <h3>Server answer</h3>
 <pre>{{ answer }}</pre>
+<h3>POI table</h3>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Rating</th>
+  </tr>
+
+  @for (p of pois; track p.id) {
+    <tr (click)="setDataInForm(p)">
+      <td>{{ p.id }}</td>
+      <td>{{ p.name }}</td>
+      <td>{{ p.category }}</td>
+      <td>{{ p.rating }}</td>
+    </tr>
+  }
+</table>
