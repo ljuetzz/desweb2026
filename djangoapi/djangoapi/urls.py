@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+#Your current webcrud/urls.py is wrong because it includes webcrud inside itself and uses views that do not exist yet.
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
@@ -41,4 +42,5 @@ urlpatterns = [
     path('buildings/', include('buildings.urls')),
     path('flowers/', include('flowers.urls')),
     path('accidentes/', include('accidentes.urls')),
+    path('webcrud/', include('webcrud.urls')), #At the end of urlpatterns, add this line:
 ]
