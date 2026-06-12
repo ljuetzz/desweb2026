@@ -3,6 +3,8 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 #from djangoapi.codelist import models
 from . import models
@@ -11,6 +13,7 @@ from . import models
 from scripts.p1.streetsDjangoModels.street import Street
 from scripts.p1.buildingsDjangoModels.building import Building
 from scripts.p1.poiDjangoModels.poi import POI
+from scripts.p1.librosDjangoModels.libro import Libro
 
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -27,7 +30,7 @@ class HelloWorldValenciaEramsus(View):
         data['width'] = request.POST.get('width', None)
         return JsonResponse({"ok":True,"message": "Erasmus Valencia. Hello world", "data": [data]}, status=200)
 
-class BuildingView(View):
+class BuildingView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
 
@@ -68,7 +71,7 @@ class BuildingView(View):
         else:            
             return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
     
-class StreetView(View):
+class StreetView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
 
@@ -110,7 +113,7 @@ class StreetView(View):
         else:            
             return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
         
-class POIView(View):
+class POIView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
 
@@ -147,5 +150,44 @@ class POIView(View):
             return JsonResponse(poi.update(data), status=200)
         elif action == 'delete':
             return JsonResponse(poi.delete(data), status=200)
+        else:            
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)
+        
+class LibroView(View):
+
+    def get(self, request, **kwargs):
+
+        libro = Libro()
+
+        action = kwargs.get('action', None)
+        if action == 'selectone':
+            data = {}
+            data['id'] = request.GET.get('id', None)
+            return JsonResponse(libro.selectOne(data), status=200)
+        elif action == 'selectall':
+            return JsonResponse(libro.selectAll(), status=200)
+        else:
+            return JsonResponse({"ok":False,"message": "Invalid action, only 'selectone' and 'selectall' are allowed with GET requests!", "data":[]},status=200)
+    
+    def post(self, request, **kwargs):
+
+        action = kwargs.get('action', None)
+        libro = Libro()
+
+        data = {}
+        data['id'] = request.POST.get('id', None)
+        print(f"data id: {data['id']}")
+        data['titulo'] = request.POST.get('titulo', None)
+        data['autor'] = request.POST.get('autor', None)
+        data['paginas'] = request.POST.get('paginas', None)
+        data['precio'] = request.POST.get('precio', None)
+        data['publicado'] = request.POST.get('publicado', None)
+
+        if action == 'insert':
+             return JsonResponse(libro.insert(data), status=200)
+        elif action == 'update':
+            return JsonResponse(libro.update(data), status=200)
+        elif action == 'delete':
+            return JsonResponse(libro.delete(data), status=200)
         else:            
             return JsonResponse({"ok":False,"message": "Invalid action, only 'insert', 'update' and 'delete' are allowed with POST requests!", "data":[]},status=200)

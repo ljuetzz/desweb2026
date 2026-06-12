@@ -25,4 +25,9 @@ urlpatterns = [
     path("pois/", views.POIView.as_view()),
     path("pois/<str:action>/", views.POIView.as_view(), name='pois_views'),  # POST requests
     path("pois/<str:action>/<int:id>/", views.POIView.as_view(), name='pois_views'),  # POST requests
+
+    # Libros urls
+    path("libros/", views.LibroView.as_view()),
+    path("libros/<str:action>/", views.LibroView.as_view(), name='libros_views'),  # POST requests
+    path("libros/<str:action>/<int:id>/", views.LibroView.as_view(), name='libros_views'),  # POST requests
 ]
