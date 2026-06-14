@@ -100,12 +100,27 @@ MIDDLEWARE = [
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    CORS_ALLOW_ORIGINS = [WEB_URL]
+    CORS_ALLOWED_ORIGINS = [
+        WEB_URL,
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+    ]
 
-#necressary to allow the cookies to be sent in the header of the request
 CORS_ALLOW_CREDENTIALS = True
-ROOT_URLCONF = 'djangoapi.urls'
 
+CSRF_TRUSTED_ORIGINS = [
+    WEB_URL,
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+]
+
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = True
+
+ROOT_URLCONF = 'djangoapi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -203,7 +218,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if DEBUG:
     LOGIN_URL = "/core/not_loggedin/"
 else:
-    LOGIN_URL = "/desweb-api/core/not_loggedin/"
+    LOGIN_URL = "/api/core/not_loggedin/"
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
